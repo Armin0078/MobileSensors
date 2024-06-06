@@ -12,7 +12,16 @@ namespace MobileSensors
 			this.screenRecording = screenRecording;
 			btnStop.IsVisible = false;
 		}
+		private void cameraView_CamerasLoaded(object sender, EventArgs e)
+		{
+			cameraView.Camera = cameraView.Cameras.First();
 
+			MainThread.BeginInvokeOnMainThread(async () =>
+			{
+				await cameraView.StopCameraAsync();
+				await cameraView.StartCameraAsync();
+			});
+		}
 		async void StartRecordingClicked(object sender, EventArgs e)
 		{
 			if (!screenRecording.IsSupported)
@@ -59,9 +68,6 @@ namespace MobileSensors
 			{
 				await Shell.Current.DisplayAlert("No Screen Recording", "NADA", "OK");
 			}
-			
-
-			
 		}
 	}
 }

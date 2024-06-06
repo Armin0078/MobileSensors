@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Camera.MAUI;
+using Microsoft.Extensions.Logging;
 using Plugin.Maui.ScreenRecording;
 
 namespace MobileSensors
@@ -11,6 +12,7 @@ namespace MobileSensors
 			builder
 				.UseMauiApp<App>()
 				.UseScreenRecording()
+				.UseMauiCameraView()
 				.ConfigureFonts(fonts =>
 				{
 					fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
