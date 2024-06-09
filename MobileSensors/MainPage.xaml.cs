@@ -1,4 +1,5 @@
-﻿using Plugin.Maui.ScreenRecording;
+﻿using MobileSensors.MVVM.ViewModel;
+using Plugin.Maui.ScreenRecording;
 
 
 namespace MobileSensors
@@ -6,6 +7,7 @@ namespace MobileSensors
 	public partial class MainPage : ContentPage
 	{
 		readonly IScreenRecording screenRecording;
+		SensorsViewModel sensorViewModel = new();
 		public MainPage(IScreenRecording screenRecording)
 		{
 			InitializeComponent();
@@ -38,6 +40,7 @@ namespace MobileSensors
 				};
 
 				screenRecording.StartRecording(options);
+				sensorViewModel.OnOffSensors();
 				btnStart.IsVisible = false;
 				btnStop.IsVisible = true;
 			}
@@ -51,7 +54,9 @@ namespace MobileSensors
 		{
 			try
 			{
-				ScreenRecordingFile screenResult = await screenRecording.StopRecording();
+				ScreenRecordingFile? screenResult = await screenRecording.StopRecording();
+				sensorViewModel.OnOffSensors();
+
 				btnStart.IsVisible = true;
 				btnStop.IsVisible = false;
 				if (screenResult != null)
