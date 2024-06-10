@@ -7,14 +7,16 @@ namespace MobileSensors
 	public partial class MainPage : ContentPage
 	{
 		readonly IScreenRecording screenRecording;
-		SensorsViewModel sensorViewModel = new();
+		readonly SensorsViewModel sensorViewModel = new();
 		public MainPage(IScreenRecording screenRecording)
 		{
 			InitializeComponent();
+			BindingContext = new SensorsViewModel();
+
 			this.screenRecording = screenRecording;
 			btnStop.IsVisible = false;
 		}
-		private void cameraView_CamerasLoaded(object sender, EventArgs e)
+		private void CameraView_CamerasLoaded(object sender, EventArgs e)
 		{
 			cameraView.Camera = cameraView.Cameras.First();
 
@@ -54,15 +56,15 @@ namespace MobileSensors
 		{
 			try
 			{
-				ScreenRecordingFile? screenResult = await screenRecording.StopRecording();
 				sensorViewModel.OnOffSensors();
-
+				ScreenRecordingFile? screenResult = await screenRecording.StopRecording();
+				
 				btnStart.IsVisible = true;
 				btnStop.IsVisible = false;
 				if (screenResult != null)
 				{
 					FileInfo f = new(screenResult.FullPath);
-					await Shell.Current.DisplayAlert("File Created", $"Path: {screenResult.FullPath} Size: {f.Length.ToString("N0")} bytes", "OK");
+					await Shell.Current.DisplayAlert("File Created", $"Path: {screenResult.FullPath} Size: {f.Length:N0} bytes", "OK");
 				}
 				else
 				{

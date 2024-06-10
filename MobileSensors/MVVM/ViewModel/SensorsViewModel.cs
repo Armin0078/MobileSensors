@@ -1,14 +1,40 @@
-﻿using System.Diagnostics;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Diagnostics;
 
 namespace MobileSensors.MVVM.ViewModel
 {
-	public class SensorsViewModel
-	{
+	public partial class SensorsViewModel : ObservableObject
+	{ 
 		public string? generalText;
 
 		readonly Stopwatch stopwatch = new();
 		TimeSpan timeSpan;
 		bool isStarted = false;
+
+		[ObservableProperty]
+		string? lblGyroscopeColor;
+
+		[ObservableProperty]
+		string? lblGyroscopeText;
+
+		[ObservableProperty]
+		string? lblAccelerometerColor;
+
+		[ObservableProperty]
+		string? lblAccelerometerText;
+
+		[ObservableProperty]
+		string? lblCompassColor;
+
+		[ObservableProperty]
+		string? lblCompassText;
+
+		[ObservableProperty]
+		string? lblMagnetometerColor;
+
+		[ObservableProperty]
+		string? lblMagnetometerText;
+
 
 		public SensorsViewModel()
 		{
@@ -37,7 +63,7 @@ namespace MobileSensors.MVVM.ViewModel
 			}
 		}
 
-		static public void MobileSensors()
+		public void MobileSensors()
 		{
 			Gyroscope_Clicked();
 			Accelerometer_Clicked();
@@ -50,33 +76,38 @@ namespace MobileSensors.MVVM.ViewModel
 			//Task.Run(() => Magnetometer_Clicked());
 		}
 
-		static public void Gyroscope_Clicked()
+		public void Gyroscope_Clicked()
 		{
 			try
 			{
 				if (Gyroscope.Default.IsMonitoring)
 					Gyroscope.Default.Stop();
 				else
-					Gyroscope.Default.Start(SensorSpeed.UI);
+					Gyroscope.Default.Start(SensorSpeed.UI);		
 			}
-			catch (FeatureNotSupportedException fnsEx)
+			catch (FeatureNotSupportedException)
 			{
-				
+				LblGyroscopeColor = "Red";
+				LblGyroscopeText = "Your Device Dose Not Support Gyroscope Sensor";
 			}
-			catch (Exception ex)
+			catch (Exception e)
 			{
-				
+				LblGyroscopeColor = "Red";
+				LblGyroscopeText = $"Gyroscope: {e.Message}";
 			}
 		}
 		void Gyroscope_ReadingChanged(object? sender, GyroscopeChangedEventArgs e)
 		{
+			LblGyroscopeColor = "Green";
+			LblGyroscopeText = $"Gyroscope: {e.Reading.AngularVelocity}";
+
 			timeSpan = stopwatch.Elapsed;
 			string text = $"{timeSpan}---Gyroscope:-{e.Reading.AngularVelocity}";
 			generalText += text + Environment.NewLine;
 		}
 
 
-		static public void Accelerometer_Clicked()
+		public void Accelerometer_Clicked()
 		{
 			try
 			{
@@ -85,23 +116,28 @@ namespace MobileSensors.MVVM.ViewModel
 				else
 					Accelerometer.Default.Start(SensorSpeed.UI);
 			}
-			catch (FeatureNotSupportedException fnsEx)
+			catch (FeatureNotSupportedException)
 			{
-				
+				LblAccelerometerColor = "Red";
+				LblAccelerometerText = "Your Device Dose Not Support Accelerometer Sensor";
 			}
-			catch (Exception ex)
+			catch (Exception e)
 			{
-				
+				LblAccelerometerColor = "Red";
+				LblAccelerometerText = $"Accelerometer: {e.Message}";
 			}
 		}
 		void Accelerometer_ReadingChanged(object? sender, AccelerometerChangedEventArgs e)
 		{
+			LblAccelerometerColor = "Green";
+			LblAccelerometerText = $"Accelerometer: {e.Reading.Acceleration}";
+
 			timeSpan = stopwatch.Elapsed;
 			string text = $"{timeSpan}---Accelerometer:-{e.Reading.Acceleration}";
 			generalText += text + Environment.NewLine;
 		}
 
-		static public void Compass_Clicked()
+		public void Compass_Clicked()
 		{
 			try
 			{
@@ -110,22 +146,27 @@ namespace MobileSensors.MVVM.ViewModel
 				else
 					Compass.Default.Start(SensorSpeed.UI);
 			}
-			catch (FeatureNotSupportedException fnsEx)
+			catch (FeatureNotSupportedException)
 			{
-				
+				LblCompassColor = "Red";
+				LblCompassText = "Your Device Dose Not Support Compass Sensor";
 			}
-			catch (Exception ex)
+			catch (Exception e)
 			{
-				
+				LblCompassColor = "Red";
+				LblCompassText = $"Compass: {e.Message}";
 			}
 		}
 		private void Compass_ReadingChanged(object? sender, CompassChangedEventArgs e)
 		{
+			LblCompassColor = "Green";
+			LblCompassText = $"Compass: {e.Reading.HeadingMagneticNorth}";
+
 			timeSpan = stopwatch.Elapsed;
 			string text = $"{timeSpan}---Compass:-{e.Reading.HeadingMagneticNorth}";
 			generalText += text + Environment.NewLine + Environment.NewLine;
 		}
-		static public void Magnetometer_Clicked()
+		public void Magnetometer_Clicked()
 		{
 			try
 			{
@@ -134,17 +175,22 @@ namespace MobileSensors.MVVM.ViewModel
 				else
 					Magnetometer.Default.Start(SensorSpeed.UI);
 			}
-			catch (FeatureNotSupportedException fnsEx)
+			catch (FeatureNotSupportedException)
 			{
-				
+				LblMagnetometerColor = "Red";
+				LblMagnetometerText = "Your Device Dose Not Support Magnetometer Sensor";
 			}
-			catch (Exception ex)
+			catch (Exception e)
 			{
-				
+				LblMagnetometerColor = "Red";
+				LblMagnetometerText = $"Magnetometer: {e.Message}";
 			}
 		}
 		private void Magnetometer_ReadingChanged(object? sender, MagnetometerChangedEventArgs e)
 		{
+			LblMagnetometerColor = "Green";
+			LblMagnetometerText = $"Magnetometer: {e.Reading.MagneticField}";
+
 			timeSpan = stopwatch.Elapsed;
 			string text = $"{timeSpan}---Magnetometer:-{e.Reading.MagneticField}";
 			generalText += text + Environment.NewLine;

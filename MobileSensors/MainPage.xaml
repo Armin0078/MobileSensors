@@ -2,6 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
+             xmlns:viewmodel="clr-namespace:MobileSensors.MVVM.ViewModel"
+             x:DataType="viewmodel:SensorsViewModel"
              x:Class="MobileSensors.MainPage">
 
     <ScrollView>
@@ -13,7 +15,7 @@
             <cv:CameraView x:Name="cameraView"
                            WidthRequest="400"
                            HeightRequest="400"
-                           CamerasLoaded="cameraView_CamerasLoaded"/>
+                           CamerasLoaded="CameraView_CamerasLoaded"/>
 
             <Button Text="Start Recording"
                     x:Name="btnStart"
@@ -28,6 +30,21 @@
                     BackgroundColor="Red"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"/>
+
+
+            <Label Text="{Binding LblGyroscopeText}"
+                   TextColor="{Binding LblGyroscopeColor}"/>
+
+            <Label Text="{Binding LblAccelerometerText}"
+                    TextColor="{Binding LblAccelerometerColor}"/>
+
+            <Label Text="{Binding LblCompassText}"
+                   TextColor="{Binding LblCompassColor}"/>
+                
+            <Label Text="{Binding LblMagnetometerText}"
+                    TextColor="{Binding LblMagnetometerColor}"/>
+
+
 
         </VerticalStackLayout>
     </ScrollView>
